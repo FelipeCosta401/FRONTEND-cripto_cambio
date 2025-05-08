@@ -28,7 +28,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         setUser(user)
         localStorage.setItem("token", accessToken)
         Api.interceptors.request.use(config => {
-            config.headers['Authorization'] = `Bearer ${token}`
+            config.headers['Authorization'] = `Bearer ${accessToken}`
             return config
         })
     }
