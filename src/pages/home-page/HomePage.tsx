@@ -18,16 +18,16 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DataTable } from "./conversion-historic-table/Data-table"
-import { columns } from "./conversion-historic-table/columns"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Loader from "@/components/loader/Loader"
+import InfoCard from "@/components/info-card/InfoCard"
+
+import ConversionsHistoricTableSection from "./conversion-historic-table/ConversionsHistoricTableSection"
 
 import { FaBrazilianRealSign } from "react-icons/fa6";
 import { TbCurrencyDollar } from "react-icons/tb";
 import { RiExchangeDollarLine } from "react-icons/ri";
-import InfoCard from "@/components/info-card/InfoCard"
 
 const conversionFormSchema = z.object({
   coinId: z.string().min(1, { message: "Selecione uma moeda!" }),
@@ -38,13 +38,7 @@ export type conversionFormType = z.infer<typeof conversionFormSchema>
 
 const HomePage = () => {
   const { getAllCoins } = useFetchCoin()
-  const { getConversionHistoric, calculateNewCoersion, conversion } = useCovnersion()
-  const { data: conversionList, isLoading: isConversionListLoading } = useQuery({
-    queryKey: ["fetch-user-conversion-historic"],
-    queryFn: async () => {
-      return await getConversionHistoric()
-    }
-  })
+  const { calculateNewCoersion, conversion } = useCovnersion()  
   const { data: coinList } = useQuery({
     queryKey: ["fetch-coin-list"],
     queryFn: async () => {
@@ -151,24 +145,8 @@ const HomePage = () => {
             />
           </section>
         </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Histórico de conversões</CardTitle>
-          <CardDescription>Confira abaixo o seu histórico de conversões</CardDescription>
-        </CardHeader>
-        {
-          isConversionListLoading ?
-            <CardContent className="flex justify-center ">
-              <Loader className="w-20 h-20" />
-            </CardContent>
-            :
-            conversionList &&
-            <CardContent >
-              <DataTable columns={columns} data={conversionList} />
-            </CardContent>
-        }
-      </Card>
+      </Card>      
+      <ConversionsHistoricTableSection />
     </div>
   )
 }
