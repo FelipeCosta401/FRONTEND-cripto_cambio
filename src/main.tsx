@@ -1,3 +1,5 @@
+import { QueryClientProvider, QueryClient } from "react-query"
+
 import { RouterProvider } from "react-router-dom"
 
 import { createRoot } from 'react-dom/client'
@@ -10,11 +12,15 @@ import routes from "./routes/routes"
 import { AuthContextProvider } from "./context/AuthContext"
 import { UserContextProvider } from "./context/UserContext"
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById('root')!).render(
     <>
         <UserContextProvider>
             <AuthContextProvider>
-                <RouterProvider router={routes} />
+                <QueryClientProvider client={queryClient}>
+                    <RouterProvider router={routes} />
+                </QueryClientProvider>
             </AuthContextProvider>
         </UserContextProvider>
         <Toaster richColors />
