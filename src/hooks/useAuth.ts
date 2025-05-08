@@ -13,7 +13,7 @@ const authService = new AuthService()
 
 const useAuth = () => {
     const navigate = useNavigate()
-    const { login: contextLoginMethod } = useContext(AuthContext)
+    const { login: contextLoginMethod, logout: contextLogoutMethod } = useContext(AuthContext)
 
     async function login({ email, password }: loginFormType) {
         try {
@@ -26,7 +26,13 @@ const useAuth = () => {
         }
     }
 
-    return { login }
+    async function logout(){
+        contextLogoutMethod()
+        toast.success("Saindo...")
+        navigate("/login")
+    }
+
+    return { login, logout }
 }
 
 export default useAuth
