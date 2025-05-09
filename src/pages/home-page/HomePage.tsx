@@ -96,7 +96,7 @@ const HomePage = () => {
                                 <Loader className="w-10 h-10" />
                               </section> : coinList.map((coin, i) => (
                                 <section key={i} className="flex justify-between gap-2">
-                                  <SelectItem value={coin.id}>
+                                  <SelectItem value={coin.id!}>
                                     <img src={coin.image} className="size-4" />
                                     {coin.name}
                                   </SelectItem>
