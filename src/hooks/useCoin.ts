@@ -4,7 +4,7 @@ import { toast } from "sonner"
 
 const coinService = new CoinService()
 
-const useFetchCoin = () => {
+const useCoin = () => {
 
     async function getAllCoins() {
         try {
@@ -19,4 +19,4 @@ const useFetchCoin = () => {
 
 }
 
-export default useFetchCoin
+export default useCoin
