@@ -9,6 +9,7 @@ import App from "@/App"
 import LoginPage from "@/pages/login-page/LoginPage"
 import HomePage from "@/pages/home-page/HomePage"
 import FavoriteCoinsPage from "@/pages/favorite-coins-page/FavoriteCoinsPage"
+import RegisterPage from "@/pages/register-page/RegisterPage"
 
 const routes = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const routes = createBrowserRouter([
     {
         path: "/login",
         element: <LoginPage />
+    },
+    {
+        path: "/register",
+        element: <RegisterPage />
     }
 ])
 
