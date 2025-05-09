@@ -12,6 +12,7 @@ import useAuth from "@/hooks/useAuth"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import Loader from "@/components/loader/Loader"
 
 import { MdLogin } from "react-icons/md"
 
@@ -71,10 +72,16 @@ const LoginPage = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button className="w-full">
-                            Entrar
-                            <MdLogin className="!size-5" />
-                        </Button>
+                        {
+                            form.formState.isSubmitting ?
+                                <Button className="w-full">
+                                    Entrando
+                                    <Loader />
+                                </Button> : <Button className="w-full">
+                                    Entrar
+                                    <MdLogin className="!size-5" />
+                                </Button>
+                        }
                     </form>
                 </Form>
                 <h4>
