@@ -1,10 +1,12 @@
-
-export interface newFavoriteCoinInterface{
+export interface CoinGekkoInterface {
+    id: string,
     symbol: string,
     image: string
     name: string
 }
 
-export interface CoinGekkoInterface extends newFavoriteCoinInterface{
-    id: string,
+export interface CoinInterface{
+    image: string,
+    coinName: string,
+    coinSymbol: string
 }

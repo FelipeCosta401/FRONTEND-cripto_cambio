@@ -1,5 +1,5 @@
 import CoinService from "@/services/CoinService"
-import type { newFavoriteCoinInterface } from "@/types/CoinInterface"
+import type { CoinGekkoInterface, CoinInterface } from "@/types/CoinInterface"
 import { useEffect, useState } from "react"
 
 import { toast } from "sonner"
@@ -7,9 +7,10 @@ import { toast } from "sonner"
 const coinService = new CoinService()
 
 const useCoin = () => {
-    const STORED_FAVORITE_COINS = localStorage.getItem("favoriteCoins")
-    const DEFAULT_FAVORITE_COIN_LIST: string[] = STORED_FAVORITE_COINS ? JSON.parse(STORED_FAVORITE_COINS) : []
-    const [favoriteCoinList, setFavoriteCoinList] = useState<string[]>(DEFAULT_FAVORITE_COIN_LIST)
+    const [favoriteCoinList, setFavoriteCoinList] = useState<CoinInterface[]>(() => {
+        const stored = localStorage.getItem("favoriteCoins")
+        return stored ? JSON.parse(stored) : []
+    })
 
     useEffect(() => {
         favoriteCoinList && localStorage.setItem("favoriteCoins", JSON.stringify(favoriteCoinList))
@@ -21,9 +22,17 @@ const useCoin = () => {
 
 
             const sortedList = coinList.sort((a, b) => {
-                const aIsFav = favoriteCoinList.includes(a.id)
-                const bIsFav = favoriteCoinList.includes(b.id)
-            
+                const aIsFav = favoriteCoinList.some(fav =>
+                    fav.coinName === a.name &&
+                    fav.coinSymbol === a.symbol &&
+                    fav.image === a.image
+                )
+                const bIsFav = favoriteCoinList.some(fav =>
+                    fav.coinName === b.name &&
+                    fav.coinSymbol === b.symbol &&
+                    fav.image === b.image
+                )
+
                 if (aIsFav === bIsFav) return 0
                 return aIsFav ? -1 : 1
             })
@@ -34,9 +43,9 @@ const useCoin = () => {
         }
     }
 
-    async function handleFavoriteCoin(newFavoriteCoin: newFavoriteCoinInterface) {
+    async function handleFavoriteCoin({ image, name: coinName, symbol: coinSymbol }: CoinGekkoInterface) {
         try {
-            const coinList = await coinService.handleFavorite(newFavoriteCoin)
+            const coinList = await coinService.handleFavorite({ image, coinName, coinSymbol })
             setFavoriteCoinList(coinList)
         } catch (e: any) {
             toast.error(e.message)

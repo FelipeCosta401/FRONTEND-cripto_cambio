@@ -1,7 +1,7 @@
 import CoinGekkoApi from "@/config/CoinGekkoApi"
 import Api from "@/config/Api"
 
-import type { CoinGekkoInterface, newFavoriteCoinInterface } from "@/types/CoinInterface"
+import type { CoinInterface, CoinGekkoInterface } from "@/types/CoinInterface"
 
 export default class CoinService {
 
@@ -17,22 +17,15 @@ export default class CoinService {
             })
     }
 
-    async handleFavorite({ image, name, symbol }: newFavoriteCoinInterface) {
+    async handleFavorite({ image, coinName, coinSymbol }: CoinInterface) {
         return await Api.post("/favorites", {
-            coinSymbol: symbol,
-            coinName: name,
+            coinSymbol,
+            coinName,
             image
         })
-            .then((res: { data: { updatedFavoritesCoinsList: { coinSymbol: string }[] } }) => {
-                const { updatedFavoritesCoinsList: favoriteList } = res.data
+            .then((res: { data: { updatedFavoritesCoinsList: CoinInterface[] } }) => {
 
-                const updatedFavoritesCoinsList: string[] = []
-
-                favoriteList.forEach((coin) => {
-                    updatedFavoritesCoinsList.push(coin.coinSymbol)
-                })
-
-                return updatedFavoritesCoinsList
+                return res.data.updatedFavoritesCoinsList
             }).catch((error) => {
                 console.log(error)
                 throw new Error(error.response.data.error)

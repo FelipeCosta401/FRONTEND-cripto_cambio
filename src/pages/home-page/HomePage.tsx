@@ -101,7 +101,11 @@ const HomePage = () => {
                                     {coin.name}
                                   </SelectItem>
                                   <Button type="button" variant={"ghost"} size={"icon"} onClick={() => handleFavoriteCoin(coin)}>
-                                    {favoriteCoinList.includes(coin.id) ? <GoStarFill /> : <GoStar />}
+                                    {favoriteCoinList.some(fav =>
+                                      fav.coinName === coin.name &&
+                                      fav.coinSymbol === coin.symbol &&
+                                      fav.image === coin.image
+                                    ) ? <GoStarFill /> : <GoStar />}
                                   </Button>
                                 </section>
                               ))
