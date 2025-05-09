@@ -5,7 +5,7 @@ import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import useCovnersion from "@/hooks/useCovnersion"
-import useFetchCoin from "@/hooks/useFetchCoin"
+import useCoin from "@/hooks/useCoin"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import {
@@ -38,7 +38,7 @@ const conversionFormSchema = z.object({
 export type conversionFormType = z.infer<typeof conversionFormSchema>
 
 const HomePage = () => {
-  const { getAllCoins } = useFetchCoin()
+  const { getAllCoins, handleFavoriteCoin, favoriteCoinList } = useCoin()
   const { calculateNewConversion, conversion } = useCovnersion()
   const { data: coinList } = useQuery({
     queryKey: ["fetch-coin-list"],
@@ -100,8 +100,8 @@ const HomePage = () => {
                                     <img src={coin.image} className="size-4" />
                                     {coin.name}
                                   </SelectItem>
-                                  <Button type="button" variant={"ghost"} size={"icon"}>
-                                    <GoStar />
+                                  <Button type="button" variant={"ghost"} size={"icon"} onClick={() => handleFavoriteCoin(coin.id)}>
+                                    {favoriteCoinList.includes(coin.id) ? <GoStarFill /> : <GoStar />}
                                   </Button>
                                 </section>
                               ))
