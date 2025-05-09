@@ -15,23 +15,30 @@ import { Button } from "@/components/ui/button"
 
 import { MdLogin } from "react-icons/md"
 
-const loginFormSchema = z.object({
+const registerFormSchema = z.object({
+    name: z.string().min(5, { message: "Campo 'nome' precisa ter ao menos 5 caracteres!" }),
     email: z.string().email({ message: "Preencha o campo 'email' corretamente!" }),
-    password: z.string().min(6, { message: "Preencha o campo 'senha' corretamente! " })
+    password: z.string().min(6, { message: "Preencha o campo 'senha' corretamente! " }),
+    passwordConfirmation: z.string(),
+}).refine((data) => data.password === data.passwordConfirmation, {
+    message: "As senhas não coincidem",
+    path: ["passwordConfirmation"],
 })
 
-export type loginFormType = z.infer<typeof loginFormSchema>
+export type registerFormType = z.infer<typeof registerFormSchema>
 
-const LoginPage = () => {
+const RegisterPage = () => {
     const navigate = useNavigate()
     const { logout } = useContext(AuthContext)
-    const { login } = useAuth()
-    const form = useForm<loginFormType>({
+    const { register } = useAuth()
+    const form = useForm<registerFormType>({
         defaultValues: {
+            name: "",
             email: "",
-            password: ""
+            password: "",
+            passwordConfirmation: ""
         },
-        resolver: zodResolver(loginFormSchema)
+        resolver: zodResolver(registerFormSchema)
     })
 
     useEffect(() => {
@@ -40,10 +47,24 @@ const LoginPage = () => {
 
     return (
         <div className="h-full min-h-screen bg-background flex flex-col gap-4 justify-center items-center p-4">
-            <h1 className="text-foreground font-bold text-5xl">Entrar</h1>
+            <h1 className="text-foreground font-bold text-5xl">Cadastre-se</h1>
             <section className="w-full sm:w-[600px] bg-card p-4 py-10 rounded-md shadow-sm space-y-4">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit((data) => login(data))}>
+                    <form className="space-y-6" onSubmit={form.handleSubmit(register)}>
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Nome</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="Digite seu nome" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
                             name="email"
@@ -71,6 +92,20 @@ const LoginPage = () => {
                                 </FormItem>
                             )}
                         />
+
+                        <FormField
+                            control={form.control}
+                            name="passwordConfirmation"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Confirme sua senha</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} type="password" placeholder="Digite sua senha" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <Button className="w-full">
                             Entrar
                             <MdLogin className="!size-5" />
@@ -78,9 +113,9 @@ const LoginPage = () => {
                     </form>
                 </Form>
                 <h4>
-                    Não possui uma conta?
-                    <span onClick={() => navigate("/register")} className="ml-2 text-primary underline hover:cursor-pointer hover:text-primary/80">
-                        Cadastre-se
+                    Já possui uma conta?
+                    <span onClick={() => navigate("/login")} className="ml-2 text-primary underline hover:cursor-pointer hover:text-primary/80">
+                        Entrar
                     </span>
                 </h4>
             </section>
@@ -88,4 +123,4 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage
+export default RegisterPage

@@ -1,6 +1,7 @@
 import Api from "@/config/Api";
 
 import type { loginFormType } from "@/pages/login-page/LoginPage";
+import type { registerFormType } from "@/pages/register-page/RegisterPage";
 import type { UserInterface } from "@/types/UserInterface";
 
 interface LoginResponseInterface {
@@ -10,6 +11,20 @@ interface LoginResponseInterface {
 }
 
 export default class AuthService {
+    async register(newUser: registerFormType){
+        return await Api.post("/auth/register", newUser)
+            .then((res: { status: number, data: {message: string, createdUser: UserInterface} }) => {
+                const { message, createdUser } = res.data
+                const status = res.status
+
+                return { message, createdUser, status}
+
+            }).catch((error) => {
+                console.log(error)
+                throw new Error(error.response.data.error)
+            })
+    }
+
     async login({ email, password }: loginFormType) {
         return await Api.post("/auth/login", {
             email,
