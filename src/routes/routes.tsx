@@ -8,6 +8,7 @@ import AuthRoute from "./AuthRoute"
 import App from "@/App"
 import LoginPage from "@/pages/login-page/LoginPage"
 import HomePage from "@/pages/home-page/HomePage"
+import FavoriteCoinsPage from "@/pages/favorite-coins-page/FavoriteCoinsPage"
 
 const routes = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const routes = createBrowserRouter([
                 path: "/",
                 index: true,
                 element: <HomePage />
+            },
+            {
+                path: "/favoritas",
+                element: <FavoriteCoinsPage />
             }
         ]
     },
