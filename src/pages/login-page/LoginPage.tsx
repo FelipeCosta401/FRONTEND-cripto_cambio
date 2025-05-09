@@ -1,4 +1,6 @@
 import { useContext, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+
 import { useForm } from "react-hook-form"
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,6 +23,7 @@ const loginFormSchema = z.object({
 export type loginFormType = z.infer<typeof loginFormSchema>
 
 const LoginPage = () => {
+    const navigate = useNavigate()
     const { logout } = useContext(AuthContext)
     const { login } = useAuth()
     const form = useForm<loginFormType>({
@@ -40,7 +43,7 @@ const LoginPage = () => {
             <h1 className="text-foreground font-bold text-5xl">Entrar</h1>
             <section className="w-full sm:w-[600px] bg-card p-4 py-10 rounded-md shadow-sm space-y-4">
                 <Form {...form}>
-                    <form className="space-y-6" onSubmit={form.handleSubmit(login)}>
+                    <form onSubmit={form.handleSubmit((data) => login(data))}>
                         <FormField
                             control={form.control}
                             name="email"
@@ -76,7 +79,7 @@ const LoginPage = () => {
                 </Form>
                 <h4>
                     Não possui uma conta?
-                    <span className="ml-2 text-primary underline hover:cursor-pointer hover:text-primary/80">
+                    <span onClick={() => navigate("/register")} className="ml-2 text-primary underline hover:cursor-pointer hover:text-primary/80">
                         Cadastre-se
                     </span>
                 </h4>
