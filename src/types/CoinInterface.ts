@@ -1,5 +1,5 @@
 export interface CoinGekkoInterface {
-    id: string,
+    id?: string,
     symbol: string,
     image: string
     name: string
