@@ -5,7 +5,7 @@ import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import useCovnersion from "@/hooks/useCovnersion"
-import useFetchCoin from "@/hooks/useFetchCoin"
+import useCoin from "@/hooks/useCoin"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import {
@@ -28,6 +28,7 @@ import ConversionsHistoricTableSection from "./conversion-historic-table/Convers
 import { FaBrazilianRealSign } from "react-icons/fa6";
 import { TbCurrencyDollar } from "react-icons/tb";
 import { RiExchangeDollarLine } from "react-icons/ri";
+import { GoStar, GoStarFill } from "react-icons/go";
 
 const conversionFormSchema = z.object({
   coinId: z.string().min(1, { message: "Selecione uma moeda!" }),
@@ -37,15 +38,14 @@ const conversionFormSchema = z.object({
 export type conversionFormType = z.infer<typeof conversionFormSchema>
 
 const HomePage = () => {
-  const { getAllCoins } = useFetchCoin()
-  const { calculateNewCoersion, conversion } = useCovnersion()  
+  const { getAllCoins, handleFavoriteCoin, favoriteCoinList } = useCoin()
+  const { calculateNewConversion, conversion } = useCovnersion()
   const { data: coinList } = useQuery({
     queryKey: ["fetch-coin-list"],
     queryFn: async () => {
       return await getAllCoins()
     }
   })
-
   const form = useForm<conversionFormType>({
     defaultValues: {
       coinAmount: 0,
@@ -63,7 +63,7 @@ const HomePage = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <Form {...form}>
-            <form className="space-y-4" onSubmit={form.handleSubmit(calculateNewCoersion)}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(calculateNewConversion)}>
               <section className="flex flex-col gap-4 lg:flex-row items-start">
                 <FormField
                   control={form.control}
@@ -95,10 +95,15 @@ const HomePage = () => {
                               !coinList ? <section className="p-4 flex justify-center">
                                 <Loader className="w-10 h-10" />
                               </section> : coinList.map((coin, i) => (
-                                <SelectItem key={i} value={coin.id}>
-                                  <img src={coin.image} className="size-4" />
-                                  {coin.name}
-                                </SelectItem>
+                                <section key={i} className="flex justify-between gap-2">
+                                  <SelectItem value={coin.id}>
+                                    <img src={coin.image} className="size-4" />
+                                    {coin.name}
+                                  </SelectItem>
+                                  <Button type="button" variant={"ghost"} size={"icon"} onClick={() => handleFavoriteCoin(coin.id)}>
+                                    {favoriteCoinList.includes(coin.id) ? <GoStarFill /> : <GoStar />}
+                                  </Button>
+                                </section>
                               ))
                             }
                           </SelectGroup>
@@ -145,7 +150,7 @@ const HomePage = () => {
             />
           </section>
         </CardContent>
-      </Card>      
+      </Card>
       <ConversionsHistoricTableSection />
     </div>
   )
