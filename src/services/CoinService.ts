@@ -32,4 +32,17 @@ export default class CoinService {
             })
     }
 
+    async getFavoriteCoinList() {
+        return await Api.get("/favorites")
+            .then((res: { data: { favoritesCoinsList: CoinInterface[] } }) => {
+                const { favoritesCoinsList } = res.data
+
+                return favoritesCoinsList
+
+            }).catch((error) => {
+                console.log(error)
+                throw new Error(error.response.data.error)
+            })
+    }
+
 }

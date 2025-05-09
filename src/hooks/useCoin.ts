@@ -20,6 +20,7 @@ const useCoin = () => {
         try {
             const { coinList } = await coinService.getAllCoins()
 
+            if (favoriteCoinList.length < 1) getFavoriteCoinList()
 
             const sortedList = coinList.sort((a, b) => {
                 const aIsFav = favoriteCoinList.some(fav =>
@@ -52,7 +53,17 @@ const useCoin = () => {
         }
     }
 
-    return { getAllCoins, handleFavoriteCoin, favoriteCoinList }
+    async function getFavoriteCoinList() {
+        try {
+            const coinList = await coinService.getFavoriteCoinList()
+            setFavoriteCoinList(coinList)
+            return coinList
+        } catch (e: any) {
+            toast.error(e)
+        }
+    }
+
+    return { getAllCoins, handleFavoriteCoin, favoriteCoinList, getFavoriteCoinList }
 
 }
 

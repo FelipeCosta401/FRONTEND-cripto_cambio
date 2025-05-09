@@ -7,9 +7,14 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 
 import { FaTrash } from "react-icons/fa"
+import { useEffect } from "react"
 
 const FavoriteCoinsPage = () => {
-    const { favoriteCoinList, handleFavoriteCoin } = useCoin()
+    const { favoriteCoinList, handleFavoriteCoin, getFavoriteCoinList } = useCoin()
+
+    useEffect(() => {
+        getFavoriteCoinList()
+    }, [])
 
     async function removeCoin(coin: CoinGekkoInterface) {
         handleFavoriteCoin(coin)
