@@ -43,7 +43,7 @@ const LoginPage = () => {
             <h1 className="text-foreground font-bold text-5xl">Entrar</h1>
             <section className="w-full sm:w-[600px] bg-card p-4 py-10 rounded-md shadow-sm space-y-4">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit((data) => login(data))}>
+                    <form className="space-y-4" onSubmit={form.handleSubmit((data) => login(data))}>
                         <FormField
                             control={form.control}
                             name="email"
