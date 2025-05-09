@@ -21,7 +21,7 @@ const useCovnersion = () => {
         }
     }
 
-    async function calculateNewCoersion({ coinAmount, coinId }: conversionFormType) {
+    async function calculateNewConversion({ coinAmount, coinId }: conversionFormType) {
         try {
             const { message, results } = await conversionService.converte({ coinAmount, coinId })
             toast.success(message)
@@ -31,7 +31,7 @@ const useCovnersion = () => {
         }
     }
 
-    return { getConversionHistoric, calculateNewCoersion, conversion }
+    return { getConversionHistoric, calculateNewConversion, conversion }
 }
 
 export default useCovnersion

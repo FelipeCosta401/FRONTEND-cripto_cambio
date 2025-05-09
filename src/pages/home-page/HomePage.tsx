@@ -39,7 +39,7 @@ export type conversionFormType = z.infer<typeof conversionFormSchema>
 
 const HomePage = () => {
   const { getAllCoins } = useFetchCoin()
-  const { calculateNewCoersion, conversion } = useCovnersion()
+  const { calculateNewConversion, conversion } = useCovnersion()
   const { data: coinList } = useQuery({
     queryKey: ["fetch-coin-list"],
     queryFn: async () => {
@@ -63,7 +63,7 @@ const HomePage = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <Form {...form}>
-            <form className="space-y-4" onSubmit={form.handleSubmit(calculateNewCoersion)}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(calculateNewConversion)}>
               <section className="flex flex-col gap-4 lg:flex-row items-start">
                 <FormField
                   control={form.control}
