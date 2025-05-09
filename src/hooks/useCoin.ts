@@ -1,4 +1,5 @@
 import CoinService from "@/services/CoinService"
+import type { newFavoriteCoinInterface } from "@/types/CoinInterface"
 import { useEffect, useState } from "react"
 
 import { toast } from "sonner"
@@ -33,9 +34,9 @@ const useCoin = () => {
         }
     }
 
-    async function handleFavoriteCoin(coinSymbol: string) {
+    async function handleFavoriteCoin(newFavoriteCoin: newFavoriteCoinInterface) {
         try {
-            const coinList = await coinService.handleFavorite(coinSymbol)
+            const coinList = await coinService.handleFavorite(newFavoriteCoin)
             setFavoriteCoinList(coinList)
         } catch (e: any) {
             toast.error(e.message)
